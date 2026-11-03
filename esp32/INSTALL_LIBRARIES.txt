@@ -1,0 +1,6 @@
+Arduino IDE libraries needed:
+- ArduinoJson by Benoit Blanchon (Library Manager)
+Board package:
+- esp32 by Espressif Systems (Boards Manager)
+
+The sketch uses built-in WiFi, WiFiClientSecure, HTTPClient and time libraries.

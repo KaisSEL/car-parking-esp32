@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f766e">
+<title>Car Parking</title>
+<style>
+:root{--bg:#f2f6f7;--card:#fff;--ink:#17252e;--muted:#637581;--line:#dfe8eb;--teal:#0f766e;--green:#15803d;--greenbg:#dcfce7;--red:#b91c1c;--redbg:#fee2e2;--amber:#a16207;--amberbg:#fef3c7;--blue:#075985;--bluebg:#e0f2fe}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:11px;padding:11px 13px;font-weight:750}button:disabled{opacity:.55;cursor:not-allowed}
+.wrap{max-width:1050px;margin:auto;padding:20px 14px 40px}.head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+h1{font-size:clamp(1.4rem,4vw,2rem);margin:0}.sub,.muted{color:var(--muted);font-size:.88rem}.pill{border-radius:999px;background:#ccfbf1;color:#115e59;padding:7px 10px;font-size:.76rem;font-weight:800}
+.panel,.stat,.spot{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:16px}
+.auth{max-width:520px;margin:24px auto}.auth h2{margin-top:0}.fields{display:grid;gap:10px}.fields input{width:100%;padding:12px;border:1px solid #cbd5dc;border-radius:10px;background:#fff}
+.rowbtn{display:flex;gap:8px;flex-wrap:wrap}.primary{background:var(--teal);color:#fff}.light{background:#eaf0f2;color:#263943}.danger{background:#fff1f2;color:#be123c}.hidden{display:none!important}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}.stat{padding:13px}.statlabel{font-size:.8rem;color:var(--muted)}.statval{font-size:1.65rem;font-weight:850}
+.layout{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;align-items:start}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}h2{font-size:1.08rem;margin:0}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin-bottom:13px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}.spots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.spot{border-top:4px solid var(--green);padding:13px;cursor:pointer}.spot.occupied{border-top-color:var(--red)}.spot.reserved{border-top-color:#d97706}.spot.selected{outline:2px solid var(--teal);outline-offset:1px}
+.spothead{display:flex;justify-content:space-between;align-items:center;gap:5px}.spotname{font-size:1.1rem;font-weight:850}.badge{padding:5px 8px;border-radius:99px;font-size:.72rem;font-weight:800;white-space:nowrap}.free{background:var(--greenbg);color:var(--green)}.occupiedbadge{background:var(--redbg);color:var(--red)}.reservedbadge{background:var(--amberbg);color:var(--amber)}
+.car{font-size:35px;text-align:center;padding:6px}.tagrow{text-align:center}.tag{display:inline-block;padding:3px 9px;border-radius:99px;font-size:.7rem;font-weight:800}.tag.vip{background:var(--amberbg);color:var(--amber)}.tag.priority{background:var(--bluebg);color:var(--blue)}.tag.normal{background:#eef2f4;color:#52646f}
+.timer{text-align:center;font-weight:850;font-variant-numeric:tabular-nums;min-height:22px;margin-top:6px}.timerlabel{text-align:center;font-size:.74rem;color:var(--muted);min-height:18px}.actions{display:grid;gap:7px;margin-top:12px}
+.side{display:grid;gap:14px}.line{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:10px 0;font-size:.88rem}.line:last-child{border:0}.line span:first-child{color:var(--muted)}.line strong{text-align:right;overflow-wrap:anywhere}
+.notice{padding:11px;background:#f0fdfa;border:1px solid #99f6e4;border-radius:11px;color:#115e59;font-size:.82rem;line-height:1.5;margin-top:13px}.notice.vipnote{background:var(--amberbg);border-color:#fde68a;color:#854d0e}.notice.prinote{background:var(--bluebg);border-color:#bae6fd;color:var(--blue)}
+.statusmsg{padding:10px;border-radius:10px;background:#f8fafc;margin:10px 0;font-size:.85rem;overflow-wrap:anywhere}
+.historyitem{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.84rem}.historyitem:last-child{border:0}
+.plateinput,.durrow input,.durrow select{width:100%;padding:12px;border:1px solid #cbd5dc;border-radius:10px;background:#fff}
+.reserveform{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}.reserveform h3{margin:0 0 8px;font-size:.95rem}.durrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.chips button{padding:7px 10px;font-size:.78rem;border-radius:99px}
+.pricebox{margin:12px 0;padding:11px;border-radius:11px;background:#f8fafc;border:1px solid var(--line);font-size:.84rem}.pricebox .line{padding:5px 0;border:0}.pricebox .total{border-top:1px solid var(--line);margin-top:4px;padding-top:8px;font-weight:850}
+.balance{font-size:2rem;font-weight:850;font-variant-numeric:tabular-nums}.plus{color:var(--green)}.minus{color:var(--red)}
+.ratelist{display:grid;gap:8px;margin-top:10px;font-size:.84rem}.ratelist div{display:flex;gap:10px;align-items:flex-start}.ratelist .tag{min-width:78px;text-align:center}
+.topuprow{display:flex;gap:6px;margin-top:10px}.topuprow input{flex:1;min-width:0;padding:10px 12px;border:1px solid #cbd5dc;border-radius:10px;background:#fff}.pct{font-weight:800;color:var(--teal)}
+.topright{display:flex;flex-direction:column;align-items:flex-end;gap:7px}.topactions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.topbtn{background:#fff;border:1px solid var(--line);color:var(--ink);padding:9px 13px;border-radius:99px;font-size:.88rem;box-shadow:0 1px 3px rgba(15,37,46,.06)}.topbtn:hover{border-color:var(--teal)}.topbtn span{font-variant-numeric:tabular-nums;color:var(--teal)}
+.spots{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.spot{padding:16px 14px;transition:transform .12s,box-shadow .12s}.spot:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(15,37,46,.1)}.car{font-size:68px;line-height:1.1;padding:12px 0 8px}.spotname{font-size:1.3rem}
+.modal{position:fixed;inset:0;background:rgba(15,30,38,.55);display:flex;align-items:center;justify-content:center;padding:14px;z-index:50}
+.sheet{background:#fff;border-radius:18px;padding:18px;width:100%;max-width:440px;max-height:90vh;overflow:auto;position:relative}.sheet .panelhead{padding-right:40px}
+.closebtn{position:absolute;top:12px;right:12px;width:32px;height:32px;padding:0;border-radius:50%;background:#eaf0f2;color:#263943;line-height:1}
+.txfull .historyitem{align-items:flex-start}.txfull .when{font-size:.76rem;color:var(--muted);margin-top:2px}
+.durfield{display:flex;align-items:center;gap:7px}.durfield select{flex:1;min-width:0}.durfield span{font-weight:700;color:var(--muted)}
+.paybox{margin:10px 0 4px;background:var(--amberbg);border-color:#fde68a;color:#854d0e}
+.plate{display:block;width:fit-content;max-width:100%;margin:2px auto 8px;padding:4px 14px;background:#fff;border:2px solid #17252e;border-radius:8px;box-shadow:inset 0 0 0 2px #fff,0 0 0 1px #cfd8dc;font-weight:850;font-size:1.05rem;letter-spacing:.04em;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.plate small{display:block;font-size:.62rem;font-weight:700;letter-spacing:0;color:var(--muted);margin-top:-2px}
+footer{font-size:.78rem;color:var(--muted);line-height:1.55;margin-top:16px}
+@media(max-width:740px){.spots{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,1fr)}.wrap{padding:14px 10px 30px}.head{align-items:flex-start}.layout{grid-template-columns:1fr}.panel{padding:13px}.pill{font-size:.68rem}.stat{padding:11px}.statval{font-size:1.4rem}}
+@media(max-width:370px){.spots{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="head">
+    <div><h1> Car Parking</h1><div class="sub">ระบบจองและติดตามที่จอดรถแบบเรียลไทม์</div></div>
+    <div class="topright">
+      <div class="topactions hidden" id="topActions">
+        <button class="topbtn" id="walletBtn" aria-label="กระเป๋าเงิน">💰 <span id="topBalance">฿0</span></button>
+        <button class="topbtn" id="historyBtn" aria-label="ประวัติรายการ">🕘 ประวัติ</button>
+      </div>
+      <span class="pill" id="connectionPill">กำลังเริ่มระบบ</span>
+    </div>
+  </header>
+
+  <section class="panel auth" id="authPanel">
+    <h2>เข้าสู่ระบบ / สมัครสมาชิก</h2>
+    <p class="muted">ต้องใช้บัญชี Firebase Authentication เพื่อให้สิทธิ์การจองและกระเป๋าเงินผูกกับผู้ใช้แต่ละคน</p>
+    <div class="fields">
+      <input id="email" type="email" autocomplete="email" placeholder="อีเมล" required>
+      <input id="password" type="password" autocomplete="current-password" placeholder="รหัสผ่าน (อย่างน้อย 6 ตัว)" required>
+      <div class="rowbtn"><button class="primary" id="loginBtn">เข้าสู่ระบบ</button><button class="light" id="signupBtn">สมัครสมาชิก</button></div>
+      <div class="muted" style="text-align:center">หรือ</div>
+      <button class="light" id="googleBtn" style="border:1px solid #cbd5dc;background:#fff">🔑 เข้าสู่ระบบด้วย Google</button>
+      <div class="statusmsg" id="authMessage" aria-live="polite">กรอกอีเมลและรหัสผ่าน แล้วกด "สมัครสมาชิก" หรือ "เข้าสู่ระบบ"</div>
+    </div>
+  </section>
+
+  <section id="appPanel" class="hidden">
+    <div class="rowbtn" style="justify-content:space-between;align-items:center">
+      <div class="muted" id="userLabel">เข้าสู่ระบบแล้ว</div>
+      <button class="light" id="logoutBtn">ออกจากระบบ</button>
+    </div>
+    <div class="notice hidden" id="banner" style="margin:10px 0"></div>
+    <section class="stats">
+      <div class="stat"><div class="statlabel">ช่องทั้งหมด</div><div class="statval" id="totalCount">6</div></div>
+      <div class="stat"><div class="statlabel">ช่องว่าง</div><div class="statval" id="freeCount">—</div></div>
+      <div class="stat"><div class="statlabel">มีรถจอด</div><div class="statval" id="occupiedCount">—</div></div>
+      <div class="stat"><div class="statlabel">จองแล้ว</div><div class="statval" id="reservedCount">—</div></div>
+    </section>
+    <section class="panel">
+      <div class="panelhead"><div><h2>ผังที่จอดรถ</h2><div class="muted">แตะที่ช่องจอดเพื่อดูรายละเอียดหรือจอง</div></div><button class="light" id="refreshBtn">รีเฟรช</button></div>
+      <div class="legend"><span><i class="dot" style="background:#15803d"></i>ว่าง</span><span><i class="dot" style="background:#b91c1c"></i>มีรถ</span><span><i class="dot" style="background:#d97706"></i>จองแล้ว</span></div>
+      <div class="spots" id="spots"></div>
+      <h2 style="margin-top:22px">ประเภทช่องจอดและอัตราค่าบริการ</h2>
+      <div class="ratelist" id="rateInfo"></div>
+    </section>
+  </section>
+
+</main>
+
+<!-- popup: รายละเอียดช่องจอด -->
+<div class="modal hidden" id="slotModal" role="dialog" aria-modal="true">
+  <div class="sheet">
+    <button class="closebtn" data-close aria-label="ปิด">✕</button>
+    <div class="panelhead"><h2 id="detailTitle">เลือกช่องจอด</h2><span class="tag normal" id="detailTag">—</span></div>
+    <div class="notice" id="slotNote" style="margin:0 0 6px"></div>
+    <div class="line"><span>สถานะรถ</span><strong id="detailStatus">—</strong></div>
+    <div class="line"><span>รถเข้าจอดเมื่อ</span><strong id="detailStart">—</strong></div>
+    <div id="resLines">
+      <div class="line"><span>ผู้จอง</span><strong id="detailReservation">—</strong></div>
+      <div class="line"><span>ป้ายทะเบียน</span><strong id="detailPlate">—</strong></div>
+      <div class="line"><span>จองเมื่อ</span><strong id="detailReserveTime">—</strong></div>
+      <div class="line"><span>ต้องมาถึงก่อน</span><strong id="detailDeadline">—</strong></div>
+      <div class="line"><span>เวลาที่เหลือ</span><strong id="detailCountdown">—</strong></div>
+      <div class="line"><span>ค่าบริการที่ชำระ</span><strong id="detailFee">—</strong></div>
+    </div>
+    <div class="reserveform hidden" id="reserveForm">
+      <h3>จองช่อง A1 (VIP)</h3>
+      <input class="plateinput" id="plateInput" type="text" maxlength="12" placeholder="ป้ายทะเบียนรถ เช่น กข 1234" autocomplete="off">
+      <div class="muted" style="margin-top:10px">เลือกเวลาที่จะมาถึง เช่น 2 ชม. 30 นาที (สูงสุด 3 ชม.)</div>
+      <div class="durrow">
+        <label class="durfield"><select id="durH" aria-label="ชั่วโมง"></select><span>ชม.</span></label>
+        <label class="durfield"><select id="durM" aria-label="นาที"></select><span>นาที</span></label>
+      </div>
+      <div class="pricebox" id="priceBox"></div>
+      <button class="primary" id="reserveBtn" data-action="reserve" data-id="A1" style="width:100%">ชำระเงินและจอง</button>
+    </div>
+    <div class="actions" id="detailActions"></div>
+    <div class="notice" id="policyNote"></div>
+  </div>
+</div>
+
+<!-- popup: กระเป๋าเงิน -->
+<div class="modal hidden" id="walletModal" role="dialog" aria-modal="true">
+  <div class="sheet">
+    <button class="closebtn" data-close aria-label="ปิด">✕</button>
+    <div class="panelhead"><h2>กระเป๋าเงินจำลอง</h2><span class="tag normal">ไม่ใช่เงินจริง</span></div>
+    <div class="notice paybox hidden" id="payBox"></div>
+    <div class="muted">ยอดเงินคงเหลือ</div>
+    <div class="balance" id="balance">฿0</div>
+    <div class="chips">
+      <button class="light" data-action="topup" data-amount="50">+฿50</button>
+      <button class="light" data-action="topup" data-amount="100">+฿100</button>
+      <button class="light" data-action="topup" data-amount="500">+฿500</button>
+    </div>
+    <div class="topuprow">
+      <input id="topupInput" type="number" min="1" max="100000" step="1" inputmode="numeric" placeholder="ระบุจำนวนเงินที่ต้องการเติม (บาท)" aria-label="จำนวนเงินที่ต้องการเติม">
+      <button class="primary" data-action="topupCustom">เติมเงิน</button>
+    </div>
+    <div class="rowbtn" style="margin-top:8px"><button class="danger" data-action="resetWallet" style="width:100%">รีเซ็ตเงินเป็น ฿0</button></div>
+  </div>
+</div>
+
+<!-- popup: ประวัติรายการ -->
+<div class="modal hidden" id="historyModal" role="dialog" aria-modal="true">
+  <div class="sheet">
+    <button class="closebtn" data-close aria-label="ปิด">✕</button>
+    <div class="panelhead"><h2>ประวัติรายการ</h2></div>
+    <div class="muted">เติมเงิน จอง ยกเลิก และรีเซ็ต พร้อมวัน-เวลา</div>
+    <div class="txfull" id="txList" style="margin-top:8px"></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getDatabase, ref, onValue, runTransaction, push } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: " ",
+  authDomain: " ",
+  databaseURL: " ",
+  projectId: " ",
+  storageBucket: " ",
+  messagingSenderId: " ",
+  appId: " ",
+  measurementId: " "
+};
+
+// ---------- ประเภทช่องจอด ----------
+const SLOT_IDS = ["A1", "A2", "A3", "B1", "B2", "B3"];
+const SLOT_META = {
+  A1: { type: "vip", tag: "VIP", reservable: true,
+        note: "ช่อง VIP ต้องจองผ่านเว็บเท่านั้น คิดค่าบริการตามเวลาที่จองไว้ (ขั้นต่ำ ฿20 รวม 30 นาทีแรก เกินจากนั้นคิดตามสัดส่วน ฿20/ชม.) จองได้สูงสุด 3 ชม. ผู้ที่ไม่ได้จองไม่ควรจอดช่องนี้" },
+  A2: { type: "priority", tag: "สิทธิพิเศษ",
+        note: "สำหรับผู้สูงอายุ ผู้พิการ และสตรีมีครรภ์ ไม่ต้องจองและไม่มีค่าบริการ (ไม่เปิดให้จองผ่านเว็บ) ระบบไม่ได้ตรวจสอบสิทธิ์ โปรดเว้นไว้ให้ผู้ที่จำเป็น" }
+};
+const metaOf = id => SLOT_META[id] || { type: "normal", tag: "ทั่วไป", note: "ช่องจอดทั่วไป ไม่เปิดให้จองและไม่มีค่าบริการ จอดได้เลย (มาก่อนได้ก่อน)" };
+const isReservable = id => !!metaOf(id).reservable;
+
+// ---------- ค่าบริการและระบบเงินจำลอง ----------
+const PRICING = {
+  ratePerHour: 20, // อัตราค่าบริการ บาท / 1 ชม. (ใช้คิดส่วนที่เกินเวลาที่รวมในค่าจองแล้ว)
+  baseFee: 20,     // ค่าจองขั้นต่ำ (บาท) จ่ายแน่ๆ ทุกครั้งที่จอง
+  includedMin: 30, // เวลาที่รวมอยู่ในค่าจองขั้นต่ำ (นาที) ตั้งเป็น 0 = ค่าจอง 20 + คิดเวลาทั้งหมดเพิ่ม
+  minMin: 1,       // จองได้สั้นสุด (นาที)
+  maxMin: 180      // จองได้นานสุด (นาที) = 3 ชม.
+};
+const CANCEL_REFUND_RATE = 1;   // ยกเลิกก่อนหมดเวลา คืนเงินกี่ส่วน (1 = 100%, 0.5 = 50%)
+const INITIAL_BALANCE = 500;    // ยอดเงินเริ่มต้นของผู้ใช้ใหม่ (บาท)
+// คิดตามสัดส่วน: ราคา = นาที / 60 x อัตราต่อชม. (ปัดขึ้นเป็นบาทเต็ม ขั้นต่ำ 1 บาท)
+const extraMin = min => Math.max(0, min - PRICING.includedMin);
+const calcPrice = min => PRICING.baseFee + Math.ceil(extraMin(min) * PRICING.ratePerHour / 60 - 1e-9);
+
+let pendingBooking = null;
+let serverOffset = 0, lastSig = "", busy = false, walletInit = false;
+const expiring = new Set();
+const nowMs = () => Date.now() + serverOffset;
+let app, auth, db, currentUser = null;
+let sensorData = {}, reservations = {}, wallet = {};
+let selectedId = "A1", unsubscribe = [];
+
+const $ = id => document.getElementById(id);
+function configReady() {
+  const c = firebaseConfig;
+  const bad = v => !v || /YOUR_|PROJECT_ID|REPLACE|XXXX/i.test(String(v));
+  return !bad(c.apiKey) && !bad(c.projectId) && !bad(c.appId) &&
+         !bad(c.databaseURL) && /^https:\/\/.+/.test(c.databaseURL);
+}
+
+function message(text) { const el = $("authMessage"); if (el) el.textContent = text; else alert(text); }
+function authError(e, prefix) {
+  const msgs = {
+    "auth/email-already-in-use": "อีเมลนี้ถูกสมัครไว้แล้ว ให้กด \"เข้าสู่ระบบ\" แทน",
+    "auth/invalid-email": "รูปแบบอีเมลไม่ถูกต้อง",
+    "auth/weak-password": "รหัสผ่านสั้นเกินไป ต้องมีอย่างน้อย 6 ตัว",
+    "auth/missing-password": "กรุณากรอกรหัสผ่าน",
+    "auth/invalid-credential": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+    "auth/invalid-login-credentials": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+    "auth/user-not-found": "ไม่พบบัญชีนี้ ลองสมัครสมาชิกก่อน",
+    "auth/wrong-password": "รหัสผ่านไม่ถูกต้อง",
+    "auth/too-many-requests": "ลองหลายครั้งเกินไป กรุณารอสักครู่แล้วลองใหม่",
+    "auth/network-request-failed": "เครือข่ายมีปัญหา กรุณาตรวจสอบอินเทอร์เน็ต",
+    "auth/operation-not-allowed": "ยังไม่ได้เปิด Email/Password ใน Firebase Console > Authentication > Sign-in method",
+    "auth/unauthorized-domain": "โดเมนนี้ยังไม่ได้เพิ่มใน Authentication > Settings > Authorized domains"
+  };
+  message(prefix + (msgs[e.code] || e.message));
+}
+
+// ---------- ตัวช่วยจัดรูปแบบ ----------
+function baht(n) { n = Number(n) || 0; return (n < 0 ? "-" : "") + "฿" + Math.abs(n).toLocaleString("th-TH"); }
+function fmtMin(min) {
+  const h = Math.floor(min / 60), m = min % 60;
+  if (h === 0) return `${m} นาที`;
+  return m ? `${h} ชม. ${m} นาที` : `${h} ชม.`;
+}
+function formatDuration(ms) {
+  const sec = Math.max(0, Math.floor(ms / 1000));
+  return [Math.floor(sec / 3600), Math.floor((sec % 3600) / 60), sec % 60]
+    .map(n => String(n).padStart(2, "0")).join(":");
+}
+function formatTime(ms) {
+  if (!ms || typeof ms !== "number") return "—";
+  return new Date(ms).toLocaleString("th-TH", {day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit",hour12:false});
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function setConnection(text) { $("connectionPill").textContent = text; }
+function plateOf(res) { return res && res.plate ? res.plate : ""; }
+const mineOf = res => !!res && res.ownerUid === currentUser?.uid;
+
+// ---------- สถานะช่อง ----------
+function activeRes(id) {
+  if (!isReservable(id)) return null;
+  const r = reservations[id];
+  return r && r.ownerUid && nowMs() < (r.expiresAt || 0) ? r : null;
+}
+function slotStatus(id) {
+  const sensor = sensorData[id] || {};
+  if (sensor.occupied === true) return "occupied";
+  if (activeRes(id)) return "reserved";
+  return "free";
+}
+function statusText(status) { return ({free:"ว่าง", occupied:"มีรถจอด", reserved:"จองแล้ว"})[status]; }
+function timerText(id) {
+  const res = activeRes(id);
+  return slotStatus(id) === "reserved" && res ? formatDuration(res.expiresAt - nowMs()) : "";
+}
+function slotLabel(id, status) {
+  const t = metaOf(id).type;
+  if (status === "reserved") return "เหลือเวลาก่อนหมดสิทธิ์จอง";
+  if (status === "occupied") return "มีรถจอดอยู่";
+  if (t === "vip") return "ว่าง · จองผ่านเว็บเท่านั้น";
+  if (t === "priority") return "ว่าง · สำหรับผู้มีสิทธิ์";
+  return "ว่าง · จอดได้เลย";
+}
+
+// ---------- กระเป๋าเงินจำลอง ----------
+async function adjustBalance(delta) {
+  const r = await runTransaction(ref(db, `wallets/${currentUser.uid}/balance`), cur => {
+    const b = typeof cur === "number" ? cur : 0;
+    if (b + delta < 0) return;          // เงินไม่พอ -> ยกเลิก transaction
+    return b + delta;
+  }, { applyLocally: false });
+  return r.committed;
+}
+function logTx(type, amount, note) {
+  return push(ref(db, `wallets/${currentUser.uid}/transactions`), { type, amount, note, at: nowMs() });
+}
+async function initWallet() {
+  if (walletInit || !currentUser) return;
+  walletInit = true;
+  try {
+    await runTransaction(ref(db, `wallets/${currentUser.uid}`), cur => cur ? undefined : {
+      balance: INITIAL_BALANCE,
+      transactions: { init: { type: "topup", amount: INITIAL_BALANCE, note: "ยอดเงินเริ่มต้น (จำลอง)", at: nowMs() } }
+    }, { applyLocally: false });
+  } catch (err) { console.error(err); walletInit = false; }
+}
+async function topupCustom() {
+  const raw = Number($("topupInput").value);
+  if (!Number.isFinite(raw) || raw < 1) { $("topupInput").focus(); return alert("กรุณาระบุจำนวนเงินที่จะเติม (อย่างน้อย ฿1)"); }
+  if (raw > 100000) return alert("เติมได้ครั้งละไม่เกิน ฿100,000");
+  await topup(Math.floor(raw));
+  $("topupInput").value = "";
+}
+async function resetWallet() {
+  const cur = wallet.balance || 0;
+  if (!confirm(`รีเซ็ตยอดเงินจำลองจาก ${baht(cur)} เป็น ฿0 ใช่หรือไม่?`)) return;
+  const r = await runTransaction(ref(db, `wallets/${currentUser.uid}/balance`), () => 0, { applyLocally: false });
+  if (r.committed) { await logTx("reset", -cur, "รีเซ็ตยอดเงินเป็น ฿0"); }
+}
+async function topup(amount) {
+  amount = Number(amount);
+  if (!(amount > 0)) return false;
+  try {
+    if (await adjustBalance(amount)) { await logTx("topup", amount, "เติมเงิน (จำลอง)"); return true; }
+  } catch (err) { alert("เติมเงินไม่สำเร็จ: " + err.message); }
+  return false;
+}
+async function topupAndPay() {
+  if (!pendingBooking) return;
+  const p = pendingBooking, short = Math.max(0, p.price - (wallet.balance || 0));
+  if (short > 0 && !(await topup(short))) return;
+  await reserve(p.id, { paid: true });   // ตัวหักเงินมีการเช็กยอดซ้ำใน transaction อยู่แล้ว
+  pendingBooking = null; renderWallet();
+}
+
+// ---------- การจอง ----------
+function readDuration() {
+  const min = (Number($("durH").value) || 0) * 60 + (Number($("durM").value) || 0);
+  if (min <= 0) return { error: "กรุณาเลือกเวลาที่จะมาถึง (อย่างน้อย 1 นาที)" };
+  if (min < PRICING.minMin) return { error: `จองขั้นต่ำ ${fmtMin(PRICING.minMin)}` };
+  if (min > PRICING.maxMin) return { error: `จองได้นานสุด ${fmtMin(PRICING.maxMin)}` };
+  return { min };
+}
+function updateReserveInfo() {
+  const hSel = $("durH"), mSel = $("durM");
+  if (Number(hSel.value) * 60 >= PRICING.maxMin) mSel.value = "0";   // ครบ 3 ชม. แล้ว นาทีต้องเป็น 0
+  mSel.disabled = Number(hSel.value) * 60 >= PRICING.maxMin;
+  const d = readDuration(), box = $("priceBox"), btn = $("reserveBtn");
+  if (d.error) { box.innerHTML = `<div class="muted">${d.error}</div>`; btn.disabled = true; btn.textContent = "ชำระเงินและจอง"; return; }
+  const price = calcPrice(d.min), bal = wallet.balance || 0, enough = bal >= price;
+  const extra = extraMin(d.min), extraPct = Math.round(extra / 60 * 1000) / 10;
+  box.innerHTML =
+    `<div class="line"><span>ต้องมาถึงภายใน</span><strong>${fmtMin(d.min)}</strong></div>` +
+    `<div class="line"><span>ค่าจองขั้นต่ำ${PRICING.includedMin ? ` (รวม ${fmtMin(PRICING.includedMin)}แรก)` : ""}</span><strong>${baht(PRICING.baseFee)}</strong></div>` +
+    (extra > 0 ? `<div class="line"><span>เวลาเพิ่ม ${fmtMin(extra)} (${extraPct}% ของ 1 ชม. × ${baht(PRICING.ratePerHour)})</span><strong>${baht(price - PRICING.baseFee)}</strong></div>` : "") +
+    `<div class="line total"><span>รวมที่ต้องชำระ</span><strong>${baht(price)}</strong></div>` +
+    `<div class="line"><span>ยอดคงเหลือหลังชำระ</span><strong class="${enough ? "" : "minus"}">${baht(bal - price)}</strong></div>`;
+  btn.disabled = false;
+  btn.textContent = enough ? `ชำระ ${baht(price)} และจองช่อง A1` : `เติมเงินและจอง (ขาดอีก ${baht(price - bal)})`;
+}
+// ลบการจองแบบ atomic เฉพาะเมื่อเข้าเงื่อนไข คืนข้อมูลการจองที่ถูกลบ (หรือ null)
+async function takeReservation(id, predicate) {
+  let removed = null;
+  const result = await runTransaction(ref(db, `reservations/${id}`), cur => {
+    removed = null;
+    if (cur && cur.ownerUid && predicate(cur)) { removed = cur; return null; }
+    return;
+  }, { applyLocally: false });
+  return result.committed ? removed : null;
+}
+async function reserve(id, opts = {}) {
+  if (!isReservable(id)) return alert("ช่องนี้ไม่เปิดให้จอง ให้จอดได้เลยตามสิทธิ์/มาก่อนได้ก่อน");
+  if (slotStatus(id) !== "free") return alert("ช่องนี้ไม่ว่างหรือมีคนจองแล้ว");
+  const plate = $("plateInput").value.trim().replace(/\s+/g, " ");
+  if (!plate) { $("plateInput").focus(); return alert("กรุณากรอกป้ายทะเบียนรถก่อนจอง"); }
+  const d = readDuration();
+  if (d.error) return alert(d.error);
+  const price = calcPrice(d.min);
+  if (!opts.paid && (wallet.balance || 0) < price) {
+    // ยอดไม่พอ -> เปิดหน้าเติมเงินพร้อมรายการที่รอชำระ ไม่ต้องเปิดไปมา
+    pendingBooking = { id, plate, min: d.min, price };
+    $("topupInput").value = price - (wallet.balance || 0);
+    closeModal("slotModal"); openModal("walletModal"); renderWallet();
+    return;
+  }
+
+  const now = nowMs(), expiresAt = now + d.min * 60000, resRef = ref(db, `reservations/${id}`);
+  let result;
+  try {
+    // 1) จองช่องก่อน (transaction กันสองคนจองพร้อมกัน)
+    result = await runTransaction(resRef, cur => {
+      if (cur && cur.ownerUid && nowMs() < (cur.expiresAt || 0)) return;
+      return { ownerUid: currentUser.uid, plate, createdAt: now, durationMin: d.min, expiresAt, price };
+    }, { applyLocally: false });
+  } catch (err) { return alert("จองไม่สำเร็จ: " + err.message); }
+  if (!result.committed) return alert("จองไม่สำเร็จ เพราะมีผู้ใช้อื่นจองช่องนี้แล้ว");
+
+  // 2) หักเงิน ถ้าไม่สำเร็จให้ปล่อยช่องคืน
+  let paid = false;
+  try { paid = await adjustBalance(-price); } catch (err) { console.error(err); }
+  if (!paid) {
+    await takeReservation(id, r => r.ownerUid === currentUser.uid && r.createdAt === now);
+    return alert("หักเงินไม่สำเร็จ (ยอดเงินไม่พอ) การจองถูกยกเลิก");
+  }
+  await logTx("reserve", -price, `จอง ${id} · ${plate} · ${fmtMin(d.min)}`);
+  $("plateInput").value = "";
+  closeModal();
+  alert(`จองช่อง ${id} สำเร็จ หักเงิน ${baht(price)} ต้องมาถึงภายใน ${fmtMin(d.min)} (ก่อน ${formatTime(expiresAt)})`);
+}
+async function cancelReservation(id) {
+  const removed = await takeReservation(id, r => r.ownerUid === currentUser.uid && nowMs() < (r.expiresAt || 0));
+  if (!removed) return alert("ไม่พบการจองของคุณ (อาจหมดเวลาแล้ว)");
+  const refund = Math.round((removed.price || 0) * CANCEL_REFUND_RATE);
+  if (refund > 0) { await adjustBalance(refund); await logTx("refund", refund, `ยกเลิกการจอง ${id} · ${plateOf(removed)}`); }
+  closeModal("slotModal");
+  alert(`ยกเลิกการจองช่อง ${id} แล้ว คืนเงิน ${baht(refund)}`);
+}
+async function confirmArrival(id) {
+  const removed = await takeReservation(id, r => r.ownerUid === currentUser.uid);
+  if (removed) { closeModal("slotModal"); alert(`ยืนยันแล้ว ขอบคุณที่ใช้บริการช่อง ${id}`); }
+}
+async function wrongCar(id) {
+  const removed = await takeReservation(id, r => r.ownerUid === currentUser.uid);
+  if (!removed) return;
+  const refund = removed.price || 0;
+  if (refund > 0) { await adjustBalance(refund); await logTx("refund", refund, `คืนเงินเต็มจำนวน ช่อง ${id} (มีรถอื่นจอด)`); }
+  closeModal("slotModal");
+  alert(`รับทราบ ช่อง ${id} มีรถอื่นจอดอยู่ คืนเงินเต็มจำนวน ${baht(refund)}`);
+}
+async function checkExpiry() {
+  if (!currentUser || !db) return;
+  for (const id of SLOT_IDS) {
+    const r = reservations[id];
+    if (!r || r.ownerUid !== currentUser.uid || nowMs() < (r.expiresAt || 0) || expiring.has(id)) continue;
+    expiring.add(id);
+    try {
+      const occupied = (sensorData[id] || {}).occupied === true;
+      const removed = await takeReservation(id, x => x.ownerUid === currentUser.uid && nowMs() >= (x.expiresAt || 0));
+      if (removed && !occupied) {
+        await logTx("noshow", 0, `ไม่มาตามเวลา ช่อง ${id} · ${plateOf(removed)} (ไม่คืนเงิน)`);
+        alert(`ช่อง ${id}: ไม่ได้เข้าจอดภายในเวลาที่จอง การจองถูกยกเลิก และไม่คืนเงิน`);
+      }
+    } catch (err) { console.error(err); } finally { expiring.delete(id); }
+  }
+}
+
+// ---------- แสดงผล ----------
+function actionButtons(id) {
+  const status = slotStatus(id), res = activeRes(id), mine = mineOf(res);
+  if (status === "free") return "";
+  if (status === "reserved") return mine
+    ? `<button class="danger" data-action="cancel" data-id="${id}">ยกเลิกการจอง (คืนเงิน ${Math.round(CANCEL_REFUND_RATE * 100)}%)</button>`
+    : `<button class="light" disabled>จองโดยผู้ใช้อื่น</button>`;
+  if (res && mine) return `<div class="muted">มีรถเข้าจอดในช่องที่คุณจอง ใช่รถคุณหรือไม่?</div>
+    <button class="primary" data-action="confirm" data-id="${id}">ใช่ รถของฉัน</button>
+    <button class="danger" data-action="wrong" data-id="${id}">ไม่ใช่ รถอื่นมาจอด (คืนเงินเต็มจำนวน)</button>`;
+  if (id === "A1" && !res) return `<div class="notice vipnote" style="margin:0">มีรถจอดในช่อง VIP โดยไม่มีการจอง</div>`;
+  return `<button class="light" disabled>มีรถจอดอยู่</button>`;
+}
+function renderStats() {
+  const count = s => SLOT_IDS.filter(id => slotStatus(id) === s).length;
+  $("totalCount").textContent = SLOT_IDS.length;
+  $("freeCount").textContent = count("free");
+  $("occupiedCount").textContent = count("occupied");
+  $("reservedCount").textContent = count("reserved");
+}
+function renderSpots() {
+  $("spots").innerHTML = SLOT_IDS.map(id => {
+    const status = slotStatus(id), meta = metaOf(id);
+    return `<article class="spot ${status}${id===selectedId?" selected":""}" data-select="${id}">
+      <div class="spothead"><span class="spotname">${id}</span><span class="badge ${status==="free"?"free":status==="occupied"?"occupiedbadge":"reservedbadge"}">${statusText(status)}</span></div>
+      <div class="car">${status==="occupied"?"🚗":status==="reserved"?"🅿️":"🅿"}</div>
+      ${plateOf(activeRes(id)) ? `<span class="plate" title="ป้ายทะเบียนที่จอง">${escapeHtml(plateOf(activeRes(id)))}<small>${mineOf(activeRes(id)) ? "จองโดยคุณ" : "จองแล้ว"}</small></span>` : ""}
+      <div class="tagrow"><span class="tag ${meta.type}">${meta.tag}</span></div>
+      <div class="timer">${timerText(id)}</div><div class="timerlabel">${slotLabel(id, status)}</div>
+    </article>`;
+  }).join("");
+}
+function renderDetails() {
+  const id = selectedId, sensor = sensorData[id] || {}, res = activeRes(id), status = slotStatus(id), meta = metaOf(id);
+  $("detailTitle").textContent = `ช่อง ${id}`;
+  $("detailTag").textContent = meta.tag; $("detailTag").className = `tag ${meta.type}`;
+  const note = $("slotNote");
+  note.textContent = meta.note;
+  note.className = "notice" + (meta.type === "vip" ? " vipnote" : meta.type === "priority" ? " prinote" : "");
+  $("detailStatus").textContent = statusText(status);
+  $("detailStart").textContent = formatTime(sensor.entryTime);
+  $("resLines").classList.toggle("hidden", !isReservable(id));
+  $("detailReservation").textContent = !res ? "ไม่มี" : mineOf(res) ? "คุณ" : "มีผู้ใช้จอง";
+  $("detailPlate").textContent = plateOf(res) || "—";
+  $("detailReserveTime").textContent = res ? formatTime(res.createdAt) : "—";
+  $("detailDeadline").textContent = res ? formatTime(res.expiresAt) : "—";
+  $("detailCountdown").textContent = res ? formatDuration(res.expiresAt - nowMs()) : "—";
+  $("detailFee").textContent = res && mineOf(res) ? baht(res.price) : "—";
+  $("reserveForm").classList.toggle("hidden", !(isReservable(id) && status === "free"));
+  $("detailActions").innerHTML = actionButtons(id);
+  updateReserveInfo();
+}
+function renderWallet() {
+  const pb = $("payBox");
+  if (pendingBooking) {
+    const p = pendingBooking, short = Math.max(0, p.price - (wallet.balance || 0));
+    pb.classList.remove("hidden");
+    pb.innerHTML = `<strong>รอชำระ: จองช่อง ${escapeHtml(p.id)}</strong>` +
+      `<div>ทะเบียน ${escapeHtml(p.plate)} · มาถึงภายใน ${fmtMin(p.min)} · ค่าบริการ ${baht(p.price)}</div>` +
+      `<div>${short > 0 ? `ยอดเงินไม่พอ ขาดอีก <strong>${baht(short)}</strong>` : "ยอดเงินพอแล้ว"}</div>` +
+      `<button class="primary" data-action="topupAndPay" style="width:100%;margin-top:8px">${short > 0 ? `เติม ${baht(short)} และชำระ ${baht(p.price)} เลย` : `ชำระ ${baht(p.price)} และจอง`}</button>` +
+      `<button class="light" data-action="clearPending" style="width:100%;margin-top:6px">ยกเลิกรายการนี้</button>`;
+  } else { pb.classList.add("hidden"); pb.innerHTML = ""; }
+  $("balance").textContent = baht(wallet.balance || 0);
+  $("topBalance").textContent = baht(wallet.balance || 0);
+  const items = Object.values(wallet.transactions || {}).sort((a,b) => (b.at || 0) - (a.at || 0)).slice(0, 50);
+  $("txList").innerHTML = items.length ? items.map(t =>
+    `<div class="historyitem"><div><strong>${escapeHtml(t.note || t.type)}</strong><div class="when">${formatFull(t.at)}</div></div>` +
+    `<strong class="${t.amount > 0 ? "plus" : t.amount < 0 ? "minus" : ""}">${t.amount > 0 ? "+" : ""}${baht(t.amount)}</strong></div>`
+  ).join("") : '<div class="muted" style="margin-top:8px">ยังไม่มีรายการ</div>';
+}
+function formatFull(ms) {
+  if (!ms || typeof ms !== "number") return "—";
+  return new Date(ms).toLocaleString("th-TH", {weekday:"long",day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit",hour12:false}) + " น.";
+}
+function openModal(id) { $(id).classList.remove("hidden"); }
+function closeModal(id) {
+  if (id) $(id).classList.add("hidden"); else document.querySelectorAll(".modal").forEach(m => m.classList.add("hidden"));
+  if ((!id || id === "walletModal") && pendingBooking) { pendingBooking = null; renderWallet(); }
+}
+function renderStatic() {
+  $("rateInfo").innerHTML =
+    `<div><span class="tag vip">A1 · VIP</span><span>ต้องจองผ่านเว็บเท่านั้น เลือกเวลาที่จะมาถึงได้อิสระ ตั้งแต่ ${fmtMin(PRICING.minMin)} ถึง ${fmtMin(PRICING.maxMin)} ค่าจองขั้นต่ำ ${baht(PRICING.baseFee)} ทุกครั้ง (รวมเวลา ${fmtMin(PRICING.includedMin)}แรก) เกินจากนั้นคิดเพิ่มตามสัดส่วนของ ${baht(PRICING.ratePerHour)}/ชม. (เช่น 1 ชม. = ${baht(calcPrice(60))}, 1 ชม. 30 นาที = ${baht(calcPrice(90))}, 3 ชม. = ${baht(calcPrice(180))}) คิดเฉพาะช่วงที่จองถือช่องไว้ ไม่มีค่าจอดเพิ่มหลังรถเข้าจอด</span></div>` +
+    `<div><span class="tag priority">A2 · สิทธิพิเศษ</span><span>สำหรับผู้สูงอายุ ผู้พิการ สตรีมีครรภ์ ไม่เปิดให้จองผ่านเว็บ ไม่มีค่าบริการ จอดได้เลย</span></div>` +
+    `<div><span class="tag normal">A3, B1–B3</span><span>ช่องจอดทั่วไป ไม่เปิดให้จอง ไม่มีค่าบริการ จอดได้เลย (มาก่อนได้ก่อน)</span></div>`;
+  $("policyNote").textContent =
+    `เงื่อนไขการจอง: จองได้เฉพาะช่อง A1 (VIP) สูงสุด ${fmtMin(PRICING.maxMin)} ต่อครั้ง ชำระจากกระเป๋าเงินจำลองทันทีที่กดจอง (ขั้นต่ำ ${baht(PRICING.baseFee)} + เวลาเกิน ${fmtMin(PRICING.includedMin)} คิดตามสัดส่วน ${baht(PRICING.ratePerHour)}/ชม.) ` +
+    `ต้องมาถึงภายในเวลาที่เลือก หากไม่มาตามเวลาจะไม่คืนเงินและการจองถูกยกเลิก ยกเลิกก่อนหมดเวลาคืนเงิน ${Math.round(CANCEL_REFUND_RATE * 100)}% ` +
+    `ระบบนี้ใช้เงินจำลองเพื่อการสาธิต ไม่มีการตัดเงินจริง`;
+}
+function render() {
+  renderStats(); renderSpots(); renderDetails(); renderWallet();
+}
+function updateBanner() {
+  const banner = $("banner");
+  const id = SLOT_IDS.find(i => mineOf(activeRes(i)));
+  banner.classList.toggle("hidden", !id);
+  if (id) {
+    const r = activeRes(id);
+    banner.textContent = `คุณจองช่อง ${id} (${plateOf(r)}) ต้องมาถึงก่อน ${formatTime(r.expiresAt)} · เหลือเวลา ${formatDuration(r.expiresAt - nowMs())}`;
+  }
+  return id || "";
+}
+
+// ---------- Firebase listeners ----------
+function clearListeners() { unsubscribe.forEach(fn => fn()); unsubscribe = []; }
+function startListeners() {
+  clearListeners();
+  const paths = [
+    [".info/serverTimeOffset", v => serverOffset = v || 0],
+    [`wallets/${currentUser.uid}`, v => { wallet = v || {}; if (v === null) initWallet(); }],
+    ["sensorStatus", v => sensorData = v || {}],
+    ["reservations", v => reservations = v || {}]
+  ];
+  for (const [path, setter] of paths) {
+    const stop = onValue(ref(db, path), snap => { setter(snap.val()); render(); setConnection("เชื่อมต่อ Firebase"); },
+      error => { setConnection("อ่านข้อมูลไม่สำเร็จ"); console.error(path, error); });
+    unsubscribe.push(stop);
+  }
+}
+
+// ---------- Events ----------
+document.addEventListener("click", async event => {
+  const btn = event.target.closest("button[data-action]");
+  if (btn) {
+    if (busy) return;
+    busy = true;
+    const {action, id, amount} = btn.dataset;
+    try {
+      if (action === "reserve") await reserve(id);
+      if (action === "cancel") await cancelReservation(id);
+      if (action === "confirm") await confirmArrival(id);
+      if (action === "wrong") await wrongCar(id);
+      if (action === "topup") await topup(amount);
+      if (action === "topupCustom") await topupCustom();
+      if (action === "resetWallet") await resetWallet();
+      if (action === "topupAndPay") await topupAndPay();
+      if (action === "clearPending") { pendingBooking = null; renderWallet(); }
+    } catch (err) { alert("ทำรายการไม่สำเร็จ: " + err.message); }
+    finally { busy = false; render(); }
+    return;
+  }
+  const card = event.target.closest("[data-select]");
+  if (card) { selectedId = card.dataset.select; render(); openModal("slotModal"); return; }
+  if (event.target.closest("[data-close]") || event.target.classList.contains("modal")) closeModal();
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+$("walletBtn").addEventListener("click", () => openModal("walletModal"));
+$("historyBtn").addEventListener("click", () => openModal("historyModal"));
+(() => {
+  const opt = (n, label) => `<option value="${n}">${label}</option>`;
+  $("durH").innerHTML = Array.from({length: PRICING.maxMin / 60 + 1}, (_, i) => opt(i, i)).join("");
+  $("durM").innerHTML = Array.from({length: 60}, (_, i) => opt(i, i)).join("");
+  $("durM").value = "12";
+})();
+$("durH").addEventListener("change", updateReserveInfo);
+$("durM").addEventListener("change", updateReserveInfo);
+$("loginBtn").addEventListener("click", async () => {
+  if (!configReady()) return message("ยังไม่ได้ใส่ Firebase config กรุณาทำตาม README");
+  try { await signInWithEmailAndPassword(auth, $("email").value.trim(), $("password").value); }
+  catch (e) { authError(e, "เข้าสู่ระบบไม่สำเร็จ: "); }
+});
+$("signupBtn").addEventListener("click", async () => {
+  if (!configReady()) return message("ยังไม่ได้ใส่ Firebase config กรุณาทำตาม README");
+  const email = $("email").value.trim(), pw = $("password").value;
+  if (!email || !pw) return message("กรุณากรอกอีเมลและรหัสผ่าน");
+  if (pw.length < 6) return message("รหัสผ่านต้องมีอย่างน้อย 6 ตัว");
+  message("กำลังสมัครสมาชิก...");
+  try { await createUserWithEmailAndPassword(auth, email, pw); message("สมัครสำเร็จ กำลังเข้าสู่ระบบ..."); }
+  catch (e) { authError(e, "สมัครไม่สำเร็จ: "); }
+});
+$("googleBtn").addEventListener("click", async () => {
+  if (!configReady()) return message("ยังไม่ได้ใส่ Firebase config กรุณาทำตาม README");
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
+  try { await signInWithPopup(auth, provider); }
+  catch (e) {
+    const msgs = {
+      "auth/popup-closed-by-user": "ปิดหน้าต่างล็อกอินก่อนเสร็จ",
+      "auth/cancelled-popup-request": "ปิดหน้าต่างล็อกอินก่อนเสร็จ",
+      "auth/popup-blocked": "เบราว์เซอร์บล็อกป๊อปอัป กรุณาอนุญาตป๊อปอัปสำหรับเว็บนี้แล้วลองใหม่",
+      "auth/operation-not-allowed": "ยังไม่ได้เปิด Google ใน Authentication > Sign-in method",
+      "auth/unauthorized-domain": "โดเมนนี้ยังไม่ได้เพิ่มใน Authentication > Settings > Authorized domains"
+    };
+    message("เข้าสู่ระบบด้วย Google ไม่สำเร็จ: " + (msgs[e.code] || e.message));
+  }
+});
+$("logoutBtn").addEventListener("click", () => signOut(auth));
+$("refreshBtn").addEventListener("click", render);
+
+renderStatic();
+if (!configReady()) {
+  setConnection("รอตั้งค่า Firebase");
+  message("ขั้นตอนถัดไป: สร้าง Firebase project, เปิด Email/Password Authentication และ Realtime Database แล้วคัดลอก Web config มาแทนค่า placeholder ใน index.html");
+} else {
+  app = initializeApp(firebaseConfig); auth = getAuth(app); db = getDatabase(app);
+  onAuthStateChanged(auth, user => {
+    currentUser = user;
+    $("authPanel").classList.toggle("hidden", !!user);
+    $("appPanel").classList.toggle("hidden", !user);
+    $("topActions").classList.toggle("hidden", !user);
+    if (!user) closeModal();
+    if (user) {
+      $("userLabel").textContent = `เข้าสู่ระบบ: ${user.email || user.uid}`;
+      setConnection("กำลังเชื่อม Firebase"); startListeners();
+    } else {
+      clearListeners(); sensorData = {}; reservations = {}; wallet = {}; walletInit = false;
+      setConnection("ยังไม่เข้าสู่ระบบ");
+    }
+  });
+}
+setInterval(() => {
+  if (!currentUser) return;
+  checkExpiry();
+  const mineId = updateBanner();
+  const sig = SLOT_IDS.map(id => slotStatus(id) + plateOf(activeRes(id))).join() + mineId;
+  if (sig !== lastSig) { lastSig = sig; render(); return; }
+  document.querySelectorAll(".spot").forEach(card => {
+    const t = card.querySelector(".timer"); if (t) t.textContent = timerText(card.dataset.select);
+  });
+  const res = activeRes(selectedId);
+  if (isReservable(selectedId)) $("detailCountdown").textContent = res ? formatDuration(res.expiresAt - nowMs()) : "—";
+}, 1000);
+</script>
+</body>
+</html>
