@@ -1,0 +1,260 @@
+{
+  "sensorStatus": {
+    "A1": {
+      "occupied": false
+    },
+    "A2": {
+      "occupied": false
+    },
+    "A3": {
+      "occupied": false
+    },
+    "B1": {
+      "occupied": false
+    },
+    "B2": {
+      "occupied": false
+    },
+    "B3": {
+      "occupied": false
+    }
+  },
+  "wallets": {
+    "user1": {
+      "balance": 0,
+      "transactions": {
+        "-P4YqPTV2_NKPZPwRHmd": {
+          "amount": 50,
+          "at": 1792676571040,
+          "note": "เติมเงิน (จำลอง)",
+          "type": "topup"
+        },
+        "-P4Ysylb5k0Ovuxfr9ni": {
+          "amount": -50,
+          "at": 1792677244007,
+          "note": "รีเซ็ตยอดเงินเป็น ฿0",
+          "type": "reset"
+        },
+        "-P4YtPlbtbgnTdQL5d9L": {
+          "amount": 123,
+          "at": 1792677358695,
+          "note": "เติมเงิน (จำลอง)",
+          "type": "topup"
+        },
+        "-P4YtQDuUimvaHX4FKlW": {
+          "amount": -123,
+          "at": 1792677360570,
+          "note": "รีเซ็ตยอดเงินเป็น ฿0",
+          "type": "reset"
+        },
+        "-P4Ytr8qToeofH8q1euF": {
+          "amount": 60,
+          "at": 1792677474934,
+          "note": "เติมเงิน (จำลอง)",
+          "type": "topup"
+        },
+        "-P4Yw6AhdZjwNecnB3VQ": {
+          "amount": -60,
+          "at": 1792678064877,
+          "note": "รีเซ็ตยอดเงินเป็น ฿0",
+          "type": "reset"
+        },
+        "-P4YwDFIju5vzDrRZlQn": {
+          "amount": 500,
+          "at": 1792678093843,
+          "note": "เติมเงิน (จำลอง)",
+          "type": "topup"
+        },
+        "-P4YwDlZl0syHSGqM_VR": {
+          "amount": -500,
+          "at": 1792678095972,
+          "note": "รีเซ็ตยอดเงินเป็น ฿0",
+          "type": "reset"
+        },
+        "-P4YyZDIm-3jZuPn9CV4": {
+          "amount": 57,
+          "at": 1792678708115,
+          "note": "เติมเงิน (จำลอง)",
+          "type": "topup"
+        },
+        "-P4YyZZ2_fdH-9PX760w": {
+          "amount": -57,
+          "at": 1792678709507,
+          "note": "จอง A1 · sd 12343 · 2 ชม. 49 นาที",
+          "type": "reserve"
+        },
+        "-P4YzNPJsu8m-qdCtNjt": {
+          "amount": 57,
+          "at": 1792678921876,
+          "note": "ยกเลิกการจอง A1 · sd 12343",
+          "type": "refund"
+        },
+        "-P4YzQyqNpRwTk0fVNdN": {
+          "amount": -57,
+          "at": 1792678936502,
+          "note": "จอง A1 · ๅ/- 12445 · 2 ชม. 49 นาที",
+          "type": "reserve"
+        },
+        "-P4YzXW7-Q_u2x7b78NE": {
+          "amount": 57,
+          "at": 1792678963272,
+          "note": "ยกเลิกการจอง A1 · ๅ/- 12445",
+          "type": "refund"
+        },
+        "-P4Yz_67eHtFZzMtSXd-": {
+          "amount": -24,
+          "at": 1792678973896,
+          "note": "จอง A1 · 1245 · 1 ชม. 12 นาที",
+          "type": "reserve"
+        },
+        "-P4YzbxxW5LM_2JHedBO": {
+          "amount": 24,
+          "at": 1792678985597,
+          "note": "ยกเลิกการจอง A1 · 1245",
+          "type": "refund"
+        },
+        "-P4Z0nqU7FXTShr0y3Ub": {
+          "amount": -50,
+          "at": 1792679558559,
+          "note": "จอง A1 · 124345 · 2 ชม. 30 นาที",
+          "type": "reserve"
+        },
+        "-P4Z0r1HRu38Fo4B2Mju": {
+          "amount": 40,
+          "at": 1792679571602,
+          "note": "ยกเลิกการจอง A1 · 124345 (หัก ฿10)",
+          "type": "refund"
+        },
+        "-P4Z24YXGKC2JedwShKH": {
+          "amount": 3,
+          "at": 1792679893218,
+          "note": "เติมเงิน (จำลอง)",
+          "type": "topup"
+        },
+        "-P4Z27BbubLVNwOmEvRp": {
+          "amount": -50,
+          "at": 1792679904039,
+          "note": "จอง A1 · Da 1234 · 2 ชม. 30 นาที",
+          "type": "reserve"
+        },
+        "-P56vJoKdHQUCoPp1DKt": {
+          "amount": 100,
+          "at": 1793281838357,
+          "note": "เติมเงิน (จำลอง)",
+          "type": "topup"
+        },
+        "-P5S6Z0_KM69519d_mBp": {
+          "amount": -100,
+          "at": 1793637367909,
+          "note": "รีเซ็ตยอดเงินเป็น ฿0",
+          "type": "reset"
+        },
+        "-P5SB6xWM3VC8buV9ChM": {
+          "amount": 20,
+          "at": 1793638563681,
+          "note": "เติมเงิน (จำลอง)",
+          "type": "topup"
+        },
+        "-P5SB6zQK6fpflMElrXI": {
+          "amount": -20,
+          "at": 1793638563803,
+          "note": "จอง A1 · กขค 67 · 30 นาที",
+          "type": "reserve"
+        },
+        "-P5Unc67qN1Q-btrfjiQ": {
+          "amount": 0,
+          "at": 1793682473415,
+          "note": "ไม่มาตามเวลา ช่อง A1 · กขค 67 (ไม่คืนเงิน)",
+          "type": "noshow"
+        },
+        "-P5VVQSDD2f2WDhTlbFL": {
+          "amount": 20,
+          "at": 1793694218062,
+          "note": "เติมเงิน (จำลอง)",
+          "type": "topup"
+        },
+        "-P5VVQUAJgitbzhfT4xn": {
+          "amount": -20,
+          "at": 1793694218187,
+          "note": "จอง A1 · กขค 67 · 30 นาที",
+          "type": "reserve"
+        },
+        "-P5VX2DwAyjGdmM8I9y9": {
+          "amount": 20,
+          "at": 1793694643132,
+          "note": "ยกเลิกการจอง A1 · กขค 67",
+          "type": "refund"
+        },
+        "-P5VZ3IZWq1tOyU_Z6y_": {
+          "amount": -20,
+          "at": 1793695171811,
+          "note": "จอง A1 · กขค 67 · 1 นาที",
+          "type": "reserve"
+        },
+        "-P5VZI5KrhfmGBX7yiGB": {
+          "amount": 0,
+          "at": 1793695232405,
+          "note": "ไม่มาตามเวลา ช่อง A1 · กขค 67 (ไม่คืนเงิน)",
+          "type": "noshow"
+        }
+      }
+    },
+    "user2": {
+      "balance": 200,
+      "transactions": {
+        "-P56vj3GP-8PGDYEHxy1": {
+          "amount": -500,
+          "at": 1793281945873,
+          "note": "รีเซ็ตยอดเงินเป็น ฿0",
+          "type": "reset"
+        },
+        "-P56wHUPnDF_52JdieyJ": {
+          "amount": 100,
+          "at": 1793282090970,
+          "note": "เติมเงิน (จำลอง)",
+          "type": "topup"
+        },
+        "-P56wHXcnpxnlBNSx71D": {
+          "amount": 100,
+          "at": 1793282091176,
+          "note": "เติมเงิน (จำลอง)",
+          "type": "topup"
+        },
+        "init": {
+          "amount": 500,
+          "at": 1793281862274,
+          "note": "ยอดเงินเริ่มต้น (จำลอง)",
+          "type": "topup"
+        }
+      }
+    },
+    "user3": {
+      "balance": 0,
+      "transactions": {
+        "-P56wDkvG3GyaDEY9iRd": {
+          "amount": -500,
+          "at": 1793282075707,
+          "note": "รีเซ็ตยอดเงินเป็น ฿0",
+          "type": "reset"
+        },
+        "init": {
+          "amount": 500,
+          "at": 1793282061353,
+          "note": "ยอดเงินเริ่มต้น (จำลอง)",
+          "type": "topup"
+        }
+      }
+    },
+    "user4": {
+      "balance": 500,
+      "transactions": {
+        "init": {
+          "amount": 500,
+          "at": 1792679671253,
+          "note": "ยอดเงินเริ่มต้น (จำลอง)",
+          "type": "topup"
+        }
+      }
+    }
+  }
+}
